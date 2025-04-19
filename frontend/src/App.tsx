@@ -6,7 +6,7 @@ export default function App() {
     const [loading, setLoading] = useState(false)
 
     // Round to nearest 5
-    const roundToFive = (value) => Math.round(value / 5) * 5
+    const roundToFive = (value : number) => Math.round(value / 5) * 5
 
     // Preset configurations
     const presets = [
@@ -46,7 +46,7 @@ export default function App() {
         }
     }
 
-    const updateSpeed = async (val) => {
+    const updateSpeed = async (val :number) => {
         const roundedVal = roundToFive(val)
         setSpeed(roundedVal)
         setLoading(true)
@@ -59,7 +59,7 @@ export default function App() {
         }
     }
 
-    const handleSliderChange = (e) => {
+    const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value)
         setSpeed(value)
     }
@@ -69,7 +69,7 @@ export default function App() {
     }
 
     // Custom progress bar for EVA-02 theme
-    const ProgressBar = ({ value }) => {
+    const ProgressBar = ({ value }: { value : number }) => {
         return (
             <div className="h-3 w-full bg-black rounded-lg overflow-hidden relative">
                 <div
