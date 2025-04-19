@@ -38,3 +38,5 @@ On TrueNAS Scale just create a new app according to the docker run command above
 
 # Usage
 After the container is running you can access the web UI on `http://<your-server-ip>:8080` and you will see a simple UI with a slider to control the fan speed if you use manual mode or you can just click the **Auto** button to let the iDRAC control the fan speed. If you want Asuka-chan to scream super angry you can click on **Berserk** Mode which will set the fan speed to 100% turning the fan off completely can also be done but I do not recommend it.
+
+**Note: I created this project for my own personal server. Use it at your own risk. I am not responsible if your server turns into an Evangelion**
