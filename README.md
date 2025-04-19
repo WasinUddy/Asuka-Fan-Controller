@@ -2,13 +2,13 @@
 My fan speed controller for my **Asuka-chan** server — my Dell PowerEdge R230 server running TrueNAS Scale.
 
 <figure>
-    
+
 
 # Background
 So I got my new addition to my HomeLab, a Dell PowerEdge R230 server for a while now (I impulsively bought it). I have finally decided to put it to use as my NAS server due to its 4-bay hotswap drive bays and I also have 4 1TB 2.5" SAS drives lying around (I also impulsively bought them 😅). The server is amazing the Xeon E3 literally sip just couple watt of power running at IDLE with also a iDRAC8 IPMI it is amazing. The only issued I have with it is the crazy fan noise to place it in my office to something like a synology NAS. It's literaly always angry compared to my other server hence why I name it Asuka-chan from Evangelion amazing server just always angry. After a little bit of digging around I found out that on a Linux system there is a program called `ipmitool` which allow us to manage and configure ipmi interface like HPE iLO or Dell iDRAC but the process of configuring a Fan Speed isn't really practical it's involved typing quite a bit of command on my TrueNAS Scale shell so I decided to create this project to enable me to easily adjust my fan speed using TrueNAS Docker Apps.
 
 # Requirements
-- Computer or Server with an IPMI interface **THIS DO NOT WORK ON NORMAL PC** I only tested this on my Dell PowerEdge R230 with iDRAC8
+- Computer or Server with an IPMI interface **THIS DO NOT WORK ON NORMAL PC** I only tested this on my Dell PowerEdge R230 with iDRAC8 Enterprise
 - Linux OS (If you are using TrueNAS like me be sure to use TrueNAS Scale which is linux based not TrueNAS Core which is FreeBSD based)
 - Docker installed
 - ipmitool installed (`apt install ipmitool` on Debian/Ubuntu or `yum install ipmitool` on CentOS/RHEL)
