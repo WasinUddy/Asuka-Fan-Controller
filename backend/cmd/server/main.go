@@ -2,20 +2,19 @@ package main
 
 import (
 	"fmt"
-	"github.com/WasinUddy/Asuka-Fan-Controller/internal/controller"
-	"github.com/WasinUddy/Asuka-Fan-Controller/internal/middleware"
 	"log"
 	"net/http"
+
+	"github.com/WasinUddy/Asuka-Fan-Controller/internal/controller"
+	"github.com/WasinUddy/Asuka-Fan-Controller/internal/middleware"
 )
 
 func main() {
 	mux := http.NewServeMux()
 
-	/* Uncomment this block when Frontend is ready
 	// Serve Static Files
 	fs := http.FileServer(http.Dir("static"))
 	mux.Handle("/", fs)
-	*/
 
 	// Serve API Endpoints
 	mux.HandleFunc("/fan/status", controller.GetFanStatus)
