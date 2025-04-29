@@ -2,11 +2,10 @@ package controller
 
 import (
 	"fmt"
+	"github.com/WasinUddy/Ayanami-Fan-Controller/internal/pkg"
 	"net/http"
 	"strconv"
 	"sync"
-
-	"github.com/WasinUddy/Ayanami-Fan-Controller/internal/pkg"
 )
 
 var (

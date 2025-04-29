@@ -2,84 +2,59 @@ package pkg
 
 import (
 	"fmt"
-	"log"
-	"os/exec"
+	"github.com/WasinUddy/Ayanami-Fan-Controller/internal/utils"
+	"math"
+	"strconv"
 )
 
-// These functions handle fan mode and speed operations
-// Add these if they don't already exist
-
-func GetFanMode() (string, error) {
-	// Use IPMI to get the current fan mode
-	// For now, just read from a config file or use a simpler approach
-	// This is a placeholder - implement based on your actual setup
-
-	cmd := exec.Command("ipmitool", "raw", "0x30", "0x45", "0x00")
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return "", fmt.Errorf("failed to get fan mode: %w", err)
-	}
-
-	// Parse IPMI output - adjust based on your server's IPMI implementation
-	// This is a simplified example
-	if len(output) > 0 && output[0] == 0x01 {
-		return "auto", nil
-	}
-	return "manual", nil
-}
-
 func SetFanMode(mode string) error {
-	var cmd *exec.Cmd
+	if mode != "auto" && mode != "manual" {
+		return fmt.Errorf("invalid mode: %s, must be 'auto' or 'manual'", mode)
+	}
 
+	var cmdArgs []string
 	if mode == "auto" {
-		cmd = exec.Command("ipmitool", "raw", "0x30", "0x45", "0x01", "0x01")
-	} else if mode == "manual" {
-		cmd = exec.Command("ipmitool", "raw", "0x30", "0x45", "0x01", "0x00")
+		cmdArgs = []string{"raw", "0x30", "0x30", "0x01", "0x01"}
 	} else {
-		return fmt.Errorf("invalid fan mode: %s", mode)
+		cmdArgs = []string{"raw", "0x30", "0x30", "0x01", "0x00"}
 	}
 
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return fmt.Errorf("failed to set fan mode %s: %w, output: %s", mode, err, string(output))
-	}
-
-	log.Printf("Fan mode set to %s", mode)
-	return nil
-}
-
-func GetFanSpeed() (int, error) {
-	// This is a placeholder - implement based on your actual setup
-	cmd := exec.Command("ipmitool", "raw", "0x30", "0x45", "0x00")
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return 0, fmt.Errorf("failed to get fan speed: %w", err)
-	}
-
-	// Parse IPMI output - adjust based on your server's IPMI implementation
-	// This is a simplified example
-	if len(output) > 1 {
-		return int(output[1]), nil
-	}
-
-	return 0, fmt.Errorf("unable to parse fan speed from IPMI output")
+	return utils.RunIpmiCommand(cmdArgs...)
 }
 
 func SetFanSpeed(speed int) error {
 	if speed < 0 || speed > 100 {
-		return fmt.Errorf("invalid fan speed: %d (must be 0-100)", speed)
+		return fmt.Errorf("invalid speed: %d, must be between 0 and 100", speed)
 	}
 
-	// Convert percentage to the value expected by IPMI
-	// This formula may vary depending on your server
-	ipmiValue := int(float64(speed) * 2.55) // 0-100% to 0-255
+	/*
+		Percentage	Hex Value	RPM (Approximate, varies by fan)
+		0%	0x00	Fans off (not recommended)
+		5%	0x05	Very low speed
+		10%	0x0a	Low speed
+		15%	0x0f	Quiet but may be insufficient
+		20%	0x14	Common for low noise
+		25%	0x19	Balanced for noise/cooling
+		30%	0x1e	Moderate cooling
+		40%	0x28	Good cooling
+		50%	0x32	Medium-high speed
+		60%	0x3c	High speed
+		75%	0x4b	Very high speed
+		100%	0x64	Maximum speed
 
-	cmd := exec.Command("ipmitool", "raw", "0x30", "0x45", "0x01", "0x00", fmt.Sprintf("0x%02x", ipmiValue))
-	output, err := cmd.CombinedOutput()
+		Thank you grok AI
+	*/
+	roundedSpeed := int(math.Round(float64(speed)/5.0)) * 5
+
+	hexSpeed := fmt.Sprintf("0x%02x", roundedSpeed)
+
+	parsedHexSpeed, err := strconv.ParseUint(hexSpeed, 0, 8)
 	if err != nil {
-		return fmt.Errorf("failed to set fan speed to %d%%: %w, output: %s", speed, err, string(output))
+		return fmt.Errorf("failed to parse hex speed: %v", err)
 	}
+	hexSpeedStr := fmt.Sprintf("0x%02x", parsedHexSpeed)
 
-	log.Printf("Fan speed set to %d%%", speed)
-	return nil
+	cmdArgs := []string{"raw", "0x30", "0x30", "0x02", "0xff", hexSpeedStr}
+
+	return utils.RunIpmiCommand(cmdArgs...)
 }
