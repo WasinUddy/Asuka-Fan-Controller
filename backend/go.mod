@@ -1,4 +1,4 @@
-module github.com/WasinUddy/Asuka-Fan-Controller
+module github.com/WasinUddy/Ayanami-Fan-Controller
 
 go 1.22.2
 
