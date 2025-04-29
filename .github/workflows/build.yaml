@@ -34,7 +34,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/wasinuddy/asuka-fan-controller:${{ github.event.inputs.tag }}
-            ghcr.io/wasinuddy/asuka-fan-controller:latest
+            ghcr.io/wasinuddy/ayanami-fan-controller:${{ github.event.inputs.tag }}
+            ghcr.io/wasinuddy/ayanami-fan-controller:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
