@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/WasinUddy/Asuka-Fan-Controller/internal/controller"
-	"github.com/WasinUddy/Asuka-Fan-Controller/internal/middleware"
+	"github.com/WasinUddy/Ayanami-Fan-Controller/internal/controller"
+	"github.com/WasinUddy/Ayanami-Fan-Controller/internal/middleware"
 )
 
 func main() {
@@ -26,6 +26,6 @@ func main() {
 	corsMux := middleware.CORS(loggedMux)
 
 	// Start the server
-	fmt.Println("🚀 Starting Asuka Fan Controller Web Server on port 8080")
+	fmt.Println("🚀 Starting Rei Fan Controller Web Server on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", corsMux))
 }
